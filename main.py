@@ -78,7 +78,7 @@ class MainWindow(QMainWindow):
 
     def _show_picture(self):
         def change_picture():
-            self.label_text.hide()
+            self.label_text.setText("Пароль: 321")
             pixmap = QPixmap(resource_path("1.jpg"))
             self.label.setPixmap(pixmap)
 
