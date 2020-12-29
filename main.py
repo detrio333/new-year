@@ -2,12 +2,12 @@ import os
 import random
 import sys
 import time
-
-import schedule
 from datetime import datetime
+import schedule
 
-from PyQt5.QtCore import pyqtSignal, QThread, Qt
+from PyQt5.QtCore import pyqtSignal, QThread, Qt, QUrl
 from PyQt5.QtGui import QPixmap, QFont, QIcon
+from PyQt5.QtMultimedia import QMediaPlaylist, QMediaPlayer, QMediaContent
 from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel
 
 waiting_phrases = ("Обожди маленечко", "Всему своё время", "Рано ещё", "Приготовлениям время, а ...")
@@ -77,15 +77,29 @@ class MainWindow(QMainWindow):
         self.label_text.setText(phrase)
 
     def _show_picture(self):
-        self.label_text.hide()
-        pixmap = QPixmap(resource_path("1.jpg"))
-        self.label.setPixmap(pixmap)
+        def change_picture():
+            self.label_text.hide()
+            pixmap = QPixmap(resource_path("1.jpg"))
+            self.label.setPixmap(pixmap)
+
+        def play_music():
+            playlist = QMediaPlaylist(self)
+            url = QUrl.fromLocalFile(resource_path("Wham! - Last Christmas.mp3"))
+            playlist.addMedia(QMediaContent(url))
+            playlist.setPlaybackMode(QMediaPlaylist.Loop)
+
+            player = QMediaPlayer(self)
+            player.setPlaylist(playlist)
+            player.play()
+
+        change_picture()
+        play_music()
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     app.setApplicationName("Открытка")
-    app.setWindowIcon(QIcon(resource_path("icon.jpg")))
+    app.setWindowIcon(QIcon(resource_path("icon.ico")))
 
     main_window = MainWindow()
     main_window.show()
